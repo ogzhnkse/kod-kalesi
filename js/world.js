@@ -70,7 +70,7 @@ export function simulate(world, actions, { password } = {}) {
       const n = ahead(w.hero);
       const k = key(n.x, n.y);
       if (!w.doors.has(k)) fail = 'no_door';
-      else if (a.s !== password) fail = 'wrong_password';
+      else if (a.s !== (password && typeof password === 'object' ? password[k] : password)) fail = 'wrong_password';
       else w.doors.delete(k);
     }
     if (fail) return { frames, final: w, fail: { reason: fail, index: i } };

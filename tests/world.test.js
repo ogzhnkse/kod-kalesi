@@ -71,3 +71,12 @@ test('simulate girdi dünyayı değiştirmez', () => {
   assert.equal(m.hero.x, 1);
   assert.equal(m.coins.size, 1);
 });
+
+test('kapı başına şifre: password nesnesi "x,y" -> şifre', () => {
+  const m = parseMap(['#HD.D.#']);
+  const pw = { '2,0': 'gunes', '4,0': 'ay' };
+  const ok = simulate(m, [{ t: 'kapi', s: 'gunes' }, { t: 'yuru' }, { t: 'yuru' }, { t: 'kapi', s: 'ay' }], { password: pw });
+  assert.equal(ok.fail, null);
+  const bad = simulate(m, [{ t: 'kapi', s: 'gunes' }, { t: 'yuru' }, { t: 'yuru' }, { t: 'kapi', s: 'gunes' }], { password: pw });
+  assert.equal(bad.fail.reason, 'wrong_password');
+});
