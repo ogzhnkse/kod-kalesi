@@ -43,6 +43,7 @@ export async function evaluate(level, code, runFn) {
     const run = await runFn(code, c.inputs || []);
     const sim = simulate(parseMap(c.map), run.actions, { password: c.password });
     results.push({ run, sim });
+    if (run.error) break; // checkLevel bu denemede durur; sonrakileri çalıştırmaya gerek yok
   }
   return { ...checkLevel(level, code, results), results };
 }

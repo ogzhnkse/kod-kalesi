@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kod Kalesi — Oyunla Python</title>
+<meta name="description" content="Oğuzhan Hoca ile piksel bir kalede oynayarak Python öğren: print'ten for döngüsüne.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=VT323&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 8 8%22 shape-rendering=%22crispEdges%22%3E%3Crect width=%228%22 height=%228%22 fill=%22%230b0d1a%22/%3E%3Crect x=%221%22 y=%222%22 width=%226%22 height=%225%22 fill=%22%23ffcf3a%22/%3E%3Crect x=%221%22 y=%221%22 width=%221%22 height=%221%22 fill=%22%23ffcf3a%22/%3E%3Crect x=%223.5%22 y=%221%22 width=%221%22 height=%221%22 fill=%22%23ffcf3a%22/%3E%3Crect x=%226%22 y=%221%22 width=%221%22 height=%221%22 fill=%22%23ffcf3a%22/%3E%3Crect x=%223%22 y=%224%22 width=%222%22 height=%223%22 fill=%22%230b0d1a%22/%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- Başlangıç -->
+<section id="screen-start" class="screen active">
+  <div class="title-wrap">
+    <canvas id="title-portrait" width="160" height="160" class="pixel"></canvas>
+    <h1 class="logo">KOD<br>KALESİ</h1>
+    <p class="tagline">Python'u oynayarak öğren. Rehberin: <b>Oğuzhan Hoca</b></p>
+    <button id="btn-start" class="btn big">▶ BAŞLA</button>
+    <p id="py-status" class="py-status">Python ısınıyor…</p>
+  </div>
+</section>
+
+<!-- Bölüm haritası -->
+<section id="screen-map" class="screen">
+  <header class="bar">
+    <span class="brand">KOD KALESİ</span>
+    <span class="spacer"></span>
+    <button class="btn small btn-mute" title="Sesi aç/kapat">♪</button>
+  </header>
+  <div id="level-map" class="level-map"></div>
+</section>
+
+<!-- Oyun -->
+<section id="screen-play" class="screen">
+  <header class="bar">
+    <button id="btn-map" class="btn small">◂ Harita</button>
+    <span id="level-title" class="level-title"></span>
+    <span class="spacer"></span>
+    <button class="btn small btn-mute" title="Sesi aç/kapat">♪</button>
+  </header>
+  <main class="play">
+    <div class="left">
+      <div class="narrator">
+        <canvas id="portrait" width="96" height="96" class="pixel"></canvas>
+        <div class="speech">
+          <div class="who">OĞUZHAN HOCA</div>
+          <p id="speech-text" aria-live="polite"></p>
+          <button id="btn-next" class="btn small next" hidden>Devam ▸</button>
+        </div>
+      </div>
+      <div class="stage">
+        <canvas id="world" width="880" height="400" class="pixel"></canvas>
+        <div id="win" class="win" hidden>
+          <div class="win-box">
+            <div class="win-title">BÖLÜM GEÇİLDİ!</div>
+            <div class="win-code">Bölüm kodu: <b id="win-code"></b></div>
+            <div class="win-actions">
+              <button id="btn-again" class="btn small">↺ Tekrar</button>
+              <button id="btn-continue" class="btn">Sonraki ▸</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="goal"><span class="goal-label">HEDEF</span> <span id="goal-text"></span></div>
+    </div>
+    <div class="right">
+      <div class="editor-head">
+        <span>kod.py</span>
+        <span id="line-limit" class="line-limit"></span>
+      </div>
+      <div id="editor" class="editor"></div>
+      <div class="controls">
+        <button id="btn-run" class="btn run" disabled>▶ Çalıştır</button>
+        <button id="btn-reset" class="btn small">↺ Sıfırla</button>
+        <span id="run-status" class="run-status">Python ısınıyor…</span>
+      </div>
+      <div class="console-head">KONSOL</div>
+      <pre id="console" class="console"></pre>
+    </div>
+  </main>
+</section>
+
+<!-- Final -->
+<section id="screen-end" class="screen">
+  <div class="title-wrap">
+    <canvas id="end-portrait" width="160" height="160" class="pixel"></canvas>
+    <h1 class="logo small">KALE SENİN!</h1>
+    <p class="tagline">print, değişkenler, sayılar, input, if ve for... Hepsini kullandın. Artık Python yazabiliyorsun.</p>
+    <button id="btn-end-map" class="btn">Haritaya dön</button>
+  </div>
+</section>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

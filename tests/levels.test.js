@@ -65,3 +65,12 @@ test('6-B: açık yazılmış 41 satır satır sınırına takılır', async () 
 test('countLines boş ve yorum satırlarını saymaz', () => {
   assert.equal(countLines('# not\nyuru()\n\n   \n  al()  # yorum'), 2);
 });
+
+test('evaluate ilk hatalı denemede durur (zaman aşımı tekrar tekrar beklenmez)', async () => {
+  let calls = 0;
+  const fake = async () => { calls++; return { actions: [], stdout: [], error: { type: 'Timeout', message: '', line: null } }; };
+  const r = await evaluate(LEVELS.find(x => x.id === '5-3'), 'x', fake);
+  assert.equal(calls, 1);
+  assert.equal(r.passed, false);
+  assert.equal(r.caseIndex, 0);
+});

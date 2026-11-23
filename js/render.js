@@ -41,8 +41,8 @@ function placeSprite(ctx, name, x, y, t, flip = false) {
 }
 
 function drawBubble(ctx, text, hx, hy, t, canvasW) {
-  const size = Math.max(12, Math.round(t * 0.38));
-  ctx.font = `${size}px "Pixelify Sans", monospace`;
+  const size = Math.max(16, Math.round(t * 0.5));
+  ctx.font = `${size}px "VT323", monospace`;
   const label = text.length > 40 ? text.slice(0, 39) + '…' : text;
   const pad = size * 0.5;
   const w = ctx.measureText(label).width + pad * 2;
