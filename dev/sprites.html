@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Kod Kalesi — sprite önizleme</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap">
+<style>
+  body { background:#0b0d1a; color:#f4f1ea; font-family:"Pixelify Sans", monospace; margin:20px; }
+  .row { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end; margin-bottom:24px; }
+  figure { margin:0; text-align:center; font-size:12px; }
+  canvas { image-rendering: pixelated; background:#1a1e33; }
+</style>
+</head>
+<body>
+<h1>Sprite önizleme — ğüşıöç İĞÜŞÖÇ</h1>
+<div class="row" id="sprites"></div>
+<h2>Oğuzhan Hoca</h2>
+<div class="row"><canvas id="portrait" width="160" height="160"></canvas><p id="talk" style="max-width:420px"></p></div>
+<h2>6-B haritası (1366 genişlik simülasyonu)</h2>
+<canvas id="boss" width="860" height="440"></canvas>
+<h2>5-2 haritası + balon</h2>
+<canvas id="split" width="860" height="440"></canvas>
+<script type="module">
+  import { SPRITES, drawSprite } from '../js/sprites.js';
+  import { drawWorld } from '../js/render.js';
+  import { parseMap } from '../js/world.js';
+  import { LEVELS } from '../js/levels.js';
+  import { Narrator } from '../js/dialog.js';
+  const box = document.getElementById('sprites');
+  for (const name of Object.keys(SPRITES)) {
+    const s = SPRITES[name], sc = 6;
+    const c = document.createElement('canvas'); c.width = s.w * sc; c.height = s.h * sc;
+    drawSprite(c.getContext('2d'), name, 0, 0, sc);
+    const f = document.createElement('figure'); f.append(c, Object.assign(document.createElement('figcaption'), { textContent: name }));
+    box.append(f);
+  }
+  const boss = parseMap(LEVELS.find(l => l.id === '6-B').cases[0].map);
+  drawWorld(document.getElementById('boss').getContext('2d'), boss);
+  const sp = parseMap(LEVELS.find(l => l.id === '5-2').cases[0].map);
+  document.fonts.ready.then(() => drawWorld(document.getElementById('split').getContext('2d'), sp, { ...sp, say: 'Şifre: kırmızı!' }));
+  const n = new Narrator(document.getElementById('talk'), document.getElementById('portrait'));
+  n.say('Selam! Ben Oğuzhan Hoca. Bu kalede her şey Python ile yürür.');
+</script>
+</body>
+</html>
