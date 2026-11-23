@@ -197,6 +197,7 @@ async function run() {
   if (!state.pyReady) return;
   stopIntro();
   cancelAnimation();
+  state.runner.abort(); // önceki çalıştırma hala sürüyorsa (ör. sonsuz döngü) iptal et
   const token = state.animToken;
   state.running = true;
   $('#win').hidden = true;

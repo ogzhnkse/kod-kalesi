@@ -59,3 +59,16 @@ test('yükleme hatasında ready PYODIDE_LOAD ile reddeder', async () => {
   const r = new Runner(f.make);
   await assert.rejects(r.ready(), /PYODIDE_LOAD/);
 });
+
+test('abort süren çalıştırmayı Aborted ile bitirir, worker yenilenir', async () => {
+  const f = fakeFactory({ onCreate: w => w.emit({ type: 'ready' }) });
+  const r = new Runner(f.make);
+  await r.ready();
+  const p = r.run('while True: pass', [], 5000);
+  await new Promise(res => setTimeout(res, 10));
+  r.abort();
+  const res = await p;
+  assert.equal(res.error.type, 'Aborted');
+  assert.equal(f.made[0].terminated, true);
+  assert.equal(f.made.length, 2);
+});

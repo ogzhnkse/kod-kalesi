@@ -18,9 +18,10 @@ export class Runner {
         if (data.type === 'ready') resolve();
         else if (data.type === 'load_error') reject(new Error('PYODIDE_LOAD: ' + data.message));
         else if (data.id && this.pending.has(data.id)) {
-          const done = this.pending.get(data.id);
+          const p = this.pending.get(data.id);
           this.pending.delete(data.id);
-          done(data.result);
+          clearTimeout(p.timer);
+          p.resolve(data.result);
         }
       };
     });
@@ -31,17 +32,33 @@ export class Runner {
     return this.readyPromise;
   }
 
+  // Worker'ı öldürüp yeniler; bekleyen tüm çalıştırmalar 'type' hatasıyla biter.
+  restart(type = 'Aborted') {
+    this.worker.terminate();
+    const pending = [...this.pending.values()];
+    this.pending.clear();
+    this.spawn();
+    for (const p of pending) {
+      clearTimeout(p.timer);
+      p.resolve({ actions: [], stdout: [], error: { type: p.timedOut ? 'Timeout' : type, message: '', line: null } });
+    }
+  }
+
+  // Süren çalıştırmaları iptal eder (öğrenci yeniden Çalıştır'a bastığında).
+  abort() {
+    if (this.pending.size) this.restart('Aborted');
+  }
+
   async run(code, inputs = [], timeoutMs = 3000) {
     await this.readyPromise;
     const id = this.nextId++;
     return new Promise((resolve) => {
-      const timer = setTimeout(() => {
-        this.pending.delete(id);
-        this.worker.terminate();
-        this.spawn();
-        resolve({ actions: [], stdout: [], error: { type: 'Timeout', message: '', line: null } });
+      const entry = { resolve, timedOut: false };
+      entry.timer = setTimeout(() => {
+        entry.timedOut = true;
+        this.restart('Aborted');
       }, timeoutMs);
-      this.pending.set(id, (result) => { clearTimeout(timer); resolve(result); });
+      this.pending.set(id, entry);
       this.worker.postMessage({ id, code, inputs });
     });
   }
