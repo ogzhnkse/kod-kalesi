@@ -2,7 +2,7 @@ import { test, before } from 'node:test';
 import assert from 'node:assert/strict';
 import { loadPyodide } from 'pyodide';
 import { runStudentCode } from '../js/py-core.js';
-import { LEVELS } from '../js/levels.js';
+import { LEVELS, COMMANDS, commandsFor } from '../js/levels.js';
 import { evaluate, countLines } from '../js/check.js';
 // Çözümler yalnızca öğretmenin bilgisayarında durur (herkese açık repoda yok).
 const SOLUTIONS = await import('./solutions.js').then(m => m.SOLUTIONS, () => null);
@@ -32,6 +32,33 @@ test('anlatım satırları kısa, bölüm kodları benzersiz', () => {
     assert.ok(l.code && l.goal && l.title, l.id);
   }
   assert.equal(new Set(LEVELS.map(l => l.code)).size, LEVELS.length);
+});
+
+const idx = (id) => LEVELS.findIndex(l => l.id === id);
+
+test('her komut ilk çıktığı bölümün anlatımında adıyla tanıtılır', () => {
+  for (const c of COMMANDS) {
+    const l = LEVELS[idx(c.from)];
+    assert.ok(l, `${c.name}: bölüm ${c.from} yok`);
+    // "al" "altın"ın içinde de geçer: fonksiyonlar parantezle, anahtar kelimeler tek kelime olarak aranır.
+    const token = c.sig.startsWith(c.name + '(') ? c.name + '(' : c.name + ' ';
+    assert.ok(l.intro.some(s => s.includes(token)), `${c.name} komutu ${c.from} anlatımında geçmiyor`);
+  }
+});
+
+test('altın ve kapı içeren bölümlerden önce al() ve kapi_ac() öğretilmiş olur', () => {
+  const need = { C: 'al', D: 'kapi_ac' };
+  for (const l of LEVELS) {
+    const known = commandsFor(l.id).map(c => c.name);
+    for (const [ch, name] of Object.entries(need)) {
+      if (l.cases.some(cs => cs.map.join('').includes(ch))) assert.ok(known.includes(name), `${l.id}: ${name} öğretilmeden kullanılıyor`);
+    }
+  }
+});
+
+test('commandsFor yalnızca o bölüme kadar öğretilenleri verir', () => {
+  assert.deepEqual(commandsFor('1-1').map(c => c.name), ['print']);
+  assert.ok(commandsFor('6-B').length === COMMANDS.length);
 });
 
 test('input bölümlerinde en az iki farklı girdi var', () => {

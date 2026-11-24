@@ -165,6 +165,12 @@ body {
 }
 .line-limit { color: var(--gold); }
 .line-limit.over { color: var(--pink); }
+.cmds { display: flex; gap: 10px; align-items: baseline; }
+.cmds-label { font-size: 18px; color: var(--gold); letter-spacing: 1px; flex: none; }
+.cmd-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.cmd { font: 14px/1 var(--code); padding: 4px 7px; background: var(--panel-2); color: #e9e7ff; cursor: help; }
+.cmd.new { background: var(--cyan); color: var(--bg); }
+.cmd.new::after { content: " yeni"; font-family: var(--ui); font-size: 15px; }
 .editor { flex: 1; min-height: 160px; background: #0f1226; overflow: hidden; }
 .editor .cm-editor { height: 100%; font-size: 17px; }
 .editor .cm-editor .cm-scroller { font-family: var(--code); }

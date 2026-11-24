@@ -81,6 +81,7 @@ export const LEVELS = [
   {
     id: '3-1', topic: 'değişkenler', title: 'Şifreli Kapılar', code: 'ANAHTAR',
     intro: [
+      'Yeni komut: kapi_ac("şifre") hemen önündeki kapıyı açar. Şifre doğruysa kapı kaybolur, yürüyebilirsin.',
       'İki kapı da aynı şifreyi istiyor: ejderha. Her seferinde yazmak yerine bir kutuya koyalım.',
       'sifre = "ejderha" dersen, sifre adlı kutuya o yazı girer. Sonra kapi_ac(sifre) yeter.',
       'Kapıyı açmak için ona bakıyor ve bitişik duruyor olmalısın.',
@@ -117,6 +118,7 @@ export const LEVELS = [
   {
     id: '4-2', topic: 'sayılar', title: 'Altın Sayımı', code: 'ALTIN',
     intro: [
+      'Yeni komut: al(). Altının olduğu kareye yürü, sonra al() de. Üstünde altın yoksa olmaz.',
       'Üç altını topla ve kaç tane topladığını say. Sayacı bir değişkende tut: altin = altin + 1',
       'Dikkat: "Toplam: " bir yazı, 3 bir sayı. İkisini + ile birleştirmek için str(3) gerekir.',
     ],
@@ -229,3 +231,24 @@ export const LEVELS = [
   },
 ];
 
+
+// Ekrandaki KOMUTLAR şeridi: her komut "from" bölümünde tanıtılır, sonrasında hep görünür.
+export const COMMANDS = [
+  { name: 'print', sig: 'print("yazı")', desc: 'Kahramana yazıyı söyletir', from: '1-1' },
+  { name: 'yuru', sig: 'yuru(n)', desc: 'n adım ileri yürür. Sayı yazmazsan 1 adım', from: '2-1' },
+  { name: 'sola_don', sig: 'sola_don()', desc: 'Yerinde sola döner, yürümez', from: '2-2' },
+  { name: 'saga_don', sig: 'saga_don()', desc: 'Yerinde sağa döner, yürümez', from: '2-2' },
+  { name: 'kapi_ac', sig: 'kapi_ac("şifre")', desc: 'Hemen önündeki kapıyı şifreyle açar', from: '3-1' },
+  { name: 'al', sig: 'al()', desc: 'Üstünde durduğun karedeki altını alır', from: '4-2' },
+  { name: 'str', sig: 'str(sayı)', desc: 'Sayıyı yazıya çevirir', from: '4-2' },
+  { name: 'input', sig: 'input()', desc: 'Bekçinin söylediğini alır (hep yazı)', from: '5-1' },
+  { name: 'if', sig: 'if / else', desc: 'Koşul doğruysa if altını, değilse else altını çalıştırır', from: '5-2' },
+  { name: 'elif', sig: 'elif', desc: 'Bir koşul daha dener', from: '5-3' },
+  { name: 'for', sig: 'for i in range(n):', desc: 'Altındaki girintili satırları n kez tekrarlar', from: '6-1' },
+  { name: 'int', sig: 'int(yazı)', desc: 'Yazıyı sayıya çevirir', from: '6-3' },
+];
+
+export function commandsFor(levelId) {
+  const at = LEVELS.findIndex(l => l.id === levelId);
+  return COMMANDS.filter(c => LEVELS.findIndex(l => l.id === c.from) <= at);
+}

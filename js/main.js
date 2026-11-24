@@ -1,5 +1,5 @@
 // Ekran akışı: başlangıç → harita → bölüm → çalıştır/canlandır → sonuç.
-import { LEVELS } from './levels.js';
+import { LEVELS, commandsFor } from './levels.js';
 import { parseMap } from './world.js';
 import { evaluate, countLines } from './check.js';
 import { drawWorld } from './render.js';
@@ -148,6 +148,19 @@ function stopIntro() {
 
 const codeKey = (id) => `kk_code_${id}`;
 
+// O bölüme kadar öğrenilen komutlar; üzerine gelince ne yaptığı yazar, yeni olan vurgulanır.
+function renderCommands(level) {
+  const list = $('#cmd-list');
+  list.textContent = '';
+  for (const c of commandsFor(level.id)) {
+    const chip = document.createElement('span');
+    chip.className = 'cmd' + (c.from === level.id ? ' new' : '');
+    chip.textContent = c.sig;
+    chip.title = c.desc;
+    list.append(chip);
+  }
+}
+
 function openLevel(level) {
   state.level = level;
   cancelAnimation();
@@ -157,6 +170,7 @@ function openLevel(level) {
   $('#level-title .lid').textContent = level.id;
   $('#level-title .lname').textContent = level.title;
   $('#goal-text').textContent = level.goal;
+  renderCommands(level);
   state.editor.setValue(localStorage.getItem(codeKey(level.id)) ?? level.starter);
   state.editor.markLine(null);
   updateLineLimit();
