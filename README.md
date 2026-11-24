@@ -4,7 +4,7 @@ Lise öğrencileri için tarayıcıda oynanan, piksel arcade tarzı bir Python �
 
 - Kurulum yok: tarayıcıda açılır. Python, [Pyodide](https://pyodide.org) ile tarayıcının içinde çalışır.
 - Hesap, sunucu ya da öğrenci verisi yok. İlerleme öğrencinin tarayıcısında saklanır.
-- Öğretmen rehberi: [docs/ogretmen.md](docs/ogretmen.md)
+- Oyna: https://ogzhnkse.github.io/kod-kalesi/
 
 ## Yerelde çalıştırma
 
@@ -17,9 +17,10 @@ python3 -m http.server 8765
 
 ```bash
 npm install
-npm test          # simülatör, Python çekirdeği, bölümler (her bölümün doğru/yanlış çözümü)
-npm run e2e       # tarayıcıda uçtan uca kontrol (önce yerel sunucuyu başlatın; internet gerekir)
+npm test          # simülatör, Python çekirdeği, bölüm yapısı
 ```
+
+Bölüm çözümleri ve öğretmen rehberi bu repoda yok; öğrenciler bulmasın diye öğretmende duruyor. Çözüm dosyası olmadan çözüm testleri atlanır.
 
 ## Yapı
 

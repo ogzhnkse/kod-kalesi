@@ -2,3 +2,8 @@ node_modules/
 .DS_Store
 assets/ref/
 .superpowers/
+# Yalnızca öğretmende kalır (çözümler ve geliştirme notları)
+docs/ogretmen.md
+docs/superpowers/
+tests/solutions.js
+dev/e2e.mjs

@@ -4,7 +4,9 @@ import { loadPyodide } from 'pyodide';
 import { runStudentCode } from '../js/py-core.js';
 import { LEVELS } from '../js/levels.js';
 import { evaluate, countLines } from '../js/check.js';
-import { SOLUTIONS } from './solutions.js';
+// Çözümler yalnızca öğretmenin bilgisayarında durur (herkese açık repoda yok).
+const SOLUTIONS = await import('./solutions.js').then(m => m.SOLUTIONS, () => null);
+const needSol = { skip: SOLUTIONS ? false : 'tests/solutions.js yok (yalnızca öğretmende)' };
 
 let runFn;
 before(async () => {
@@ -19,7 +21,7 @@ test('bölümler beklenen sırada ve benzersiz', () => {
   assert.deepEqual(LEVELS.map(l => l.id), EXPECTED_IDS);
 });
 
-test('her bölümün çözümü var', () => {
+test('her bölümün çözümü var', needSol, () => {
   for (const id of EXPECTED_IDS) assert.ok(SOLUTIONS[id], id);
 });
 
@@ -39,12 +41,12 @@ test('input bölümlerinde en az iki farklı girdi var', () => {
 });
 
 for (const id of EXPECTED_IDS) {
-  test(`${id}: doğru çözüm geçer`, async () => {
+  test(`${id}: doğru çözüm geçer`, needSol, async () => {
     const l = LEVELS.find(x => x.id === id);
     const r = await evaluate(l, SOLUTIONS[id].ok, runFn);
     assert.equal(r.passed, true, r.message);
   });
-  test(`${id}: yanlış çözüm geçemez`, async () => {
+  test(`${id}: yanlış çözüm geçemez`, needSol, async () => {
     const l = LEVELS.find(x => x.id === id);
     const r = await evaluate(l, SOLUTIONS[id].bad, runFn);
     assert.equal(r.passed, false);
@@ -52,12 +54,12 @@ for (const id of EXPECTED_IDS) {
   });
 }
 
-test('5-1: girdiyi koda sabit yazan çözüm ikinci denemede düşer', async () => {
+test('5-1: girdiyi koda sabit yazan çözüm ikinci denemede düşer', needSol, async () => {
   const r = await evaluate(LEVELS.find(x => x.id === '5-1'), SOLUTIONS['5-1'].bad, runFn);
   assert.equal(r.caseIndex, 1);
 });
 
-test('6-B: açık yazılmış 41 satır satır sınırına takılır', async () => {
+test('6-B: açık yazılmış 41 satır satır sınırına takılır', needSol, async () => {
   const r = await evaluate(LEVELS.find(x => x.id === '6-B'), SOLUTIONS['6-B'].bad, runFn);
   assert.match(r.message, /6 satır/);
 });
