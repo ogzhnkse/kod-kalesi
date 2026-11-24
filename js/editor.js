@@ -79,6 +79,11 @@ function buildCodeMirror(el, doc, m) {
       state.EditorState.tabSize.of(4),
       view.keymap.of([commands.indentWithTab]),
       markField,
+      // Koyu zemin: CodeMirror'a koyu tema olduğunu söyle, imleç siyah çizilmesin.
+      view.EditorView.theme({
+        '.cm-cursor, .cm-dropCursor': { borderLeft: '3px solid #ffcf3a' },
+        '.cm-content': { caretColor: '#ffcf3a' },
+      }, { dark: true }),
       view.EditorView.updateListener.of((u) => { if (u.docChanged) listeners.forEach(fn => fn(u.state.doc.toString())); }),
     ],
   });

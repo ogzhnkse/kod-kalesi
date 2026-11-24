@@ -127,6 +127,7 @@ body {
 .narrator canvas { width: 96px; height: 96px; flex: none; box-shadow: 0 0 0 var(--px) var(--curtain); }
 .speech {
   position: relative; flex: 1;
+  display: flex; flex-direction: column;
   background: var(--ink); color: var(--bg);
   padding: 10px 14px 12px;
   --line: #c9c3b5;
@@ -136,7 +137,9 @@ body {
 .speech p { margin: 2px 0 0; font-size: 25px; line-height: 1.1; cursor: pointer; }
 .speech[data-mood="error"], .speech:has(p[data-mood="error"]) { background: #ffe1e6; }
 .speech:has(p[data-mood="win"]) { background: #e6fff8; }
-.speech .next { position: absolute; right: 10px; bottom: 8px; background: var(--gold); color: var(--bg); }
+/* Devam düğmesi metnin altında durur, cümlenin üzerine binmez */
+.speech .next { align-self: flex-end; margin-top: 6px; background: var(--gold); color: var(--bg); --line: #b07d00; }
+.speech .next[hidden] { display: none; }
 
 .stage { position: relative; flex: 1; min-height: 0; background: #0b0d1a; }
 .stage canvas { width: 100%; height: 100%; display: block; }
@@ -169,7 +172,9 @@ body {
 .editor .cm-gutters { background: #0b0d1a; color: #565c8c; border-right: 2px solid var(--line); }
 .editor .cm-activeLine { background: #171b38; }
 .editor .cm-activeLineGutter { background: #171b38; }
-.editor .cm-cursor { border-left: 2px solid var(--gold); }
+.editor .cm-editor .cm-cursor, .editor .cm-editor .cm-dropCursor { border-left: 3px solid var(--gold) !important; }
+.editor .cm-content { caret-color: var(--gold); }
+.fallback-editor { caret-color: var(--gold); }
 .editor .cm-selectionBackground, .editor .cm-focused .cm-selectionBackground { background: #2e3566 !important; }
 .editor .cm-errorLine { background: rgba(255, 79, 109, .22) !important; }
 .fallback-editor {
